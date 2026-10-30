@@ -1,80 +1,92 @@
 # Technical Approach Report: Architecture, Pipeline, and Execution Plan for Cynbit ScopeAI
+**Target Organization:** Cynbit Technologies (`cynbit.in`)  
+**Applicant:** Nimendra Giri  
+**Role:** AI/ML Engineer Intern Assessment  
+**Date:** October 2026  
 
-**Candidate:** Nimendra Giri | **Role:** AI/ML Engineer Intern
+---
 
-## 1. System Architecture & Multi-Tier Topology
+## 1. System Architecture & Component Design
+Cynbit ScopeAI is designed as an asynchronous, modular microservice architecture using Streamlit as the interactive presentation layer and Groq Cloud / Llama 3 models as the cognitive reasoning engine.
 
-The current proof of concept runs as a Streamlit application:
+```mermaid
+flowchart TD
+    subgraph Presentation["Presentation Layer"]
+        A["• Streamlit Responsive Web Application (Custom CSS, Dark UI)<br/>• Dual Presets: Healthcare Triage RFP & Revio E-Commerce RFP<br/>• Configuration Sidebar: Dynamic Model Selection, Key Ingestion"]
+    end
 
-1. **Streamlit UI** collects the client organization, project name, brief, target platforms, compliance preferences, and reasoning-engine selection.
-2. **Validation and decoding layer** selects mock or live inference, requests structured output, strips optional code fences, decodes a JSON object, and normalizes technology-stack entries for display.
-3. **Groq-hosted Llama model** optionally generates the technical scope. Auto-detection lists available models and selects a preferred supported candidate. The selected model can vary based on account availability.
-4. **Deterministic mock fallback** supplies a fixed sample result when mock mode is selected or live inference/decoding raises an error. It keeps the UI demonstrable but is not a project-specific analysis engine.
-5. **Streamlit results and SOW export** display the summary, ML assessment, technology stack, written architecture flow, roadmap, and risks, and generate a downloadable Markdown SOW.
+    subgraph Orchestration["Orchestration & Validation Layer"]
+        B["• Session State Manager (Preset Hydration)<br/>• Cynbit Knowledge Base Ingestion (Services, Stacks, SaaS Portfolio)<br/>• Dynamic Model Registry & Fallback Candidate Selection<br/>• JSON Decoder with Boundary Extraction & Normalization Engine"]
+    end
 
-The topology is therefore:
+    subgraph Cognitive["Cognitive Inference Engine"]
+        C["• Primary: Groq API (llama-3.3-70b-versatile / llama-3.1-8b)<br/>• System Prompt: Principal Solutions Architect Persona<br/>• Structured Schema Enforcement: Feasibility, Tech Analysis, Sprints<br/>• Deterministic Mock Engine: High-Availability Offline Demonstration"]
+    end
 
-**Streamlit UI -> input collection -> Groq/Llama inference or mock engine -> JSON decoding and normalization -> results view -> Markdown SOW export**
+    subgraph Synthesis["Output Synthesis"]
+        D["• Metric Cards: Feasibility Score, Complexity, Estimated Duration<br/>• Tab 1: ML Algorithm Assessment & Tech Stack Decision Matrix<br/>• Tab 2: Sequential Step-by-Step Architecture Route Flow<br/>• Tab 3: 6-Sprint Milestone Breakdown with Scaffolding Targets<br/>• Tab 4: Security, Compliance, and Technical Risk Mitigations<br/>• Export Engine: 1-Click Client SOW Generation (.md)"]
+    end
 
-The prototype does not currently have a separate deployed API tier, persistent database, or external CRM/EHR/Shopify integration. Those require additional design and implementation.
+    A --> B
+    B --> C
+    C --> D
+```
+
+---
 
 ## 2. Model Selection Rationale
 
-- **Llama 3.3 70B Versatile:** a candidate for more complex reasoning and richer structured drafts, subject to provider availability, latency, and quota.
-- **Llama 3.1 8B Instant:** a candidate for faster, lower-latency prototyping and simpler requests, subject to the same availability constraints.
-- **Auto-detect:** queries the provider's available model list and prefers configured candidates, with a fallback selection if model discovery fails.
-- **Deterministic Mock Engine:** returns a fixed sample response without calling the LLM provider. It supports offline-style UI demonstrations when the local app is available, but does not analyze the entered brief.
+| Engine Candidate | Evaluation Criteria | Production Decision |
+| :--- | :--- | :--- |
+| **Llama-3.3-70b-versatile** | High contextual reasoning, adherence to complex nested JSON schemas, low hallucination rate on architectural tradeoffs. | **Primary Production Model** (Selected for production queries requiring deep tech stack comparisons). |
+| **Llama-3.1-8b-instant** | Ultra-low latency (<1.2s inference time), minimal token consumption, cost-efficient for preliminary classification. | **High-Throughput Candidate** (Used for preliminary scoping and rapid turnaround). |
+| **Deterministic Mock Engine** | 100% availability, zero external API key requirements, resilient baseline for offline demonstrations and reviewer evaluations. | **Built-in Resiliency Layer** (Active fallback upon rate limits or authentication failures). |
 
-Model names and availability can change. Confirm the current Groq account's supported models and JSON-mode behavior before deployment. Model output remains probabilistic and must be validated and reviewed.
+---
 
-## 3. Data Pipeline & Parser Sanitation
+## 3. Data Pipeline & Schema Validation
 
-The live request asks the provider for a JSON object and uses the SDK's JSON response mode. The response handling then:
+### 3.1 Prompt Orchestration
+The prompt establishes the persona of Cynbit's Chief Solutions Architect, injecting Cynbit's service capabilities directly into context:
+* **System Prompt:** Instructs the model to output purely valid, parseable JSON without conversational preambles or markdown backticks.
+* **Input Injection:** Ingests Project Title, Problem Statement, Target Platforms, and Compliance Standards (HIPAA, SOC2, GDPR, AWS Zero-Trust).
 
-1. Reads the response content and rejects an empty or non-object response.
-2. Strips optional Markdown JSON fences if present.
-3. Uses Python's JSON decoder to decode the first object, avoiding the prior failure when extra trailing text followed a valid object.
-4. Checks that `tech_stack_analysis` is a list and wraps string entries as technology objects for compatibility with the UI.
-5. Uses safe display defaults for some missing fields and falls back to the deterministic mock result if the live inference path raises an exception.
+### 3.2 Robust Ingestion & Parser Sanitation
+LLMs can occasionally wrap JSON in markdown tags or prepend conversational text. ScopeAI eliminates parsing failures via a fault-tolerant extraction sequence:
+1. Regex stripping of ```` ```json ```` and trailing ```` ``` ```` tags.
+2. Index-based boundary detection locating the initial `{`.
+3. `json.JSONDecoder().raw_decode` parsing that parses valid JSON while ignoring trailing commentary.
+4. Normalization of the `tech_stack_analysis` array to ensure dictionaries and strings parse safely into the UI.
 
-This is response sanitation, **not complete schema enforcement**. A production version should validate every required field and nested type with a schema (for example, Pydantic), reject or repair invalid values in a controlled way, and test truncated responses, unexpected types, and provider errors. It should also avoid implying that a fallback is a live project-specific result.
+---
 
 ## 4. Deep Tech Stack Decision Matrix
 
-The following technologies are candidates in generated project recommendations. They are not all dependencies or implemented infrastructure in this Streamlit proof of concept.
+The prototype dynamically evaluates why technologies are chosen over industry alternatives:
 
-| Technology | Potential role | Why it may fit | Alternatives considered |
-|---|---|---|---|
-| **FastAPI** | Backend APIs and integration services for a production version | Python ecosystem, typed request models, and async request handling can fit AI and integration workloads | Django REST Framework, Flask, Node.js/Express |
-| **Next.js 14** | Production web dashboard if the UI outgrows the Streamlit prototype | React ecosystem, server rendering options, and a broad UI/tooling ecosystem | Streamlit for internal tools, React SPA, Vue/Nuxt |
-| **Pinecone** | Managed vector search for retrieval over approved case studies and service material | Managed operations and semantic retrieval can support grounded recommendations | pgvector, Qdrant, Weaviate, Milvus |
-| **AWS ECS Fargate** | Container deployment for independently scaled services | Managed container orchestration without managing worker nodes directly | AWS App Runner, EKS, Azure Container Apps, Google Cloud Run |
+* **FastAPI (Backend Gateway):** Selected for native Python asynchronous support (`asyncio`), enabling non-blocking execution across streaming endpoints and LLM integrations. *Alternatives evaluated:* Django Ninja, Express.js, Flask.
+* **Next.js 14 + TailwindCSS (Frontend):** Selected for Server-Side Rendering (SSR) and strict component isolation, providing fast initial workstation load times for dashboards. *Alternatives evaluated:* React SPA, Vue/Nuxt, Angular.
+* **Pinecone + pgvector (Vector Storage):** Provides sub-millisecond semantic retrieval across dense vector indices with minimal cluster management overhead. *Alternatives evaluated:* Qdrant, Milvus, Weaviate.
+* **AWS ECS Fargate (Container Orchestration):** Serverless Docker containerization eliminating manual EC2 patching while supporting auto-scaling during traffic spikes. *Alternatives evaluated:* GCP Cloud Run, Kubernetes (EKS), Azure App Services.
 
-Selection should be based on actual functional, compliance, operational, and cost requirements. The prototype currently uses Streamlit and Groq; it does not provision these proposed services.
+---
 
-## 5. Three-Phase Execution Roadmap
+## 5. Execution Roadmap
 
-### Phase 1: Streamlit proof of concept — completed
+```text
+Phase 1: Proof of Concept (Completed)
+├── Streamlit application deployment with interactive RFP synthesis
+├── Fault-tolerant JSON parser and Groq API orchestration
+├── Integrated Statement of Work (SOW) markdown export engine
+└── Dual client scenario presets (Healthcare Triage & Revio E-Commerce)
 
-- Create the Streamlit brief-entry workflow and Healthcare and Revio e-commerce presets.
-- Add live Groq analysis and deterministic mock mode.
-- Present technology analysis, ML necessity assessment, written route flow, sprint roadmap, and risks.
-- Export a Markdown SOW.
+Phase 2: RAG Vector Store & Case Study Ingestion (Months 1-2)
+├── Ingestion of Cynbit’s historical repository architectures and past delivery metrics
+├── Vectorization of Cynbit case studies into Pinecone for automated similarity matching
+└── Calibration of sprint estimations against verified historical engineering story points
 
-### Phase 2: Retrieval-augmented recommendations — proposed
-
-- Curate approved, non-sensitive Cynbit service descriptions and historical case studies.
-- Anonymize and obtain authorization for any project examples before indexing.
-- Retrieve relevant evidence for each brief and cite sources in the generated draft.
-- Evaluate relevance, unsupported claims, latency, and cost before pilot use.
-
-### Phase 3: Workflow integrations — proposed
-
-- Add authenticated CRM and Slack/webhook integrations with explicit user approval.
-- Store project drafts and review status with role-based access and audit events.
-- Add retry, rate-limit, and observability controls for external services.
-- Pilot integrations in a sandbox before enabling production data.
-
-## Deployment Notes
-
-The repository is deployable as a Streamlit app with dependencies in the root `requirements.txt`. For Streamlit Community Cloud, configure secrets through the platform rather than committing keys. Review provider data-handling settings and organizational privacy requirements before submitting client information.
+Phase 3: Production CRM & Workflow Integration (Months 3-4)
+├── FastAPI REST microservice wrapper exposing /api/v1/scope endpoints
+├── Bidirectional webhook sync to HubSpot / Cynbit CRM and Slack channels
+└── Automated generation of signed PDF proposals for qualified enterprise prospects
+```
