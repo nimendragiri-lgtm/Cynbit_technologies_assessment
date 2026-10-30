@@ -73,40 +73,18 @@ cynbit-scope-ai/
 
 ---
 
-### Deliverable 5: Submission Portal Form Filling Guide
+## 📋 Assessment Deliverables Summary
 
-When submitting your work in the candidate portal:
+| Deliverable | Description | Link |
+| :--- | :--- | :--- |
+| **Interactive Prototype** | Streamlit Web App with live Groq LLM & deterministic fallback | [Launch App](https://nimendragiri-lgtm-cynbit-technologies-assessment-app-91puum.streamlit.app/) |
+| **AI Opportunity Report** | Strategic market analysis, Cynbit ecosystem mapping & ROI projections | [View Report](docs/AI_Opportunity_Report.md) |
+| **Technical Approach Report** | System architecture, pipeline design, tradeoffs & execution plan | [View Report](docs/Technical_Approach_Report.md) |
+| **GitHub Repository** | Source code, architecture specifications, and setup instructions | [View Repository](https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment) |
 
-#### Links Structure
-* **Primary Deliverable Link \*:**  
-  `https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment`
-* **Additional Link 1:**  
-  `https://nimendragiri-lgtm-cynbit-technologies-assessment-app-91puum.streamlit.app/` *(Streamlit Cloud Live App)*
-* **Additional Link 2:**  
-  `https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment/blob/main/docs/AI_Opportunity_Report.md` *(AI Opportunity Report)*
-* **Additional Link 3:**  
-  `https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment/blob/main/docs/Technical_Approach_Report.md` *(Technical Approach Report)*
+---
 
-#### Text for "Execution Notes & Campaign Rationale (Optional)"
-Paste this directly into the portal text box:
-
-```text
-Applicant: Nimendra Giri
-Role: AI/ML Engineer Intern
-Target: Cynbit Technologies (cynbit.in)
-
-Challenge Overview & Approach:
-After analyzing Cynbit's service catalog (Autonomous Agents, LLM Automation, Cloud Migration, Full-Stack Engineering) and proprietary SaaS portfolio (Revio, TenantEase, Cynbit Studio), I identified that Cynbit's largest pre-sales bottleneck lies in the manual translation of unstructured client requirements into technical blueprints and SOWs.
-
-To address this, I built "Cynbit ScopeAI" — an autonomous technical discovery agent that:
-1. Ingests raw client problem briefs and RFPs (including built-in test presets for Healthcare Triage and Revio E-Commerce Feedback Intelligence).
-2. Evaluates whether ML is needed, recommending domain-specific transformer architectures with clinician or human-in-the-loop validation.
-3. Performs a deep tech stack tradeoff analysis (FastAPI, Next.js, Pinecone, AWS ECS) outlining exact use cases, architectural justification, and viable alternatives.
-4. Generates a clear sequential architecture route flow, a 6-sprint milestone plan, and risk mitigations.
-5. Provides a 1-click downloadable Statement of Work (SOW) markdown export.
-
-Deliverables Provided:
-- Complete GitHub Repository with clean git history, documentation, and architecture specifications.
-- Live Interactive Streamlit Prototype with dynamic Groq LLM integration and deterministic offline evaluation fallback.
-- AI Opportunity Report & Technical Approach Report detailing industry landscape analysis, model choices, data pipeline safeguards, and execution roadmap.
-```
+## 👤 Author
+* **Applicant:** Nimendra Giri
+* **Role:** AI/ML Engineer Intern Assessment Submission
+* **Target Entity:** [Cynbit Technologies](https://www.cynbit.in/)
