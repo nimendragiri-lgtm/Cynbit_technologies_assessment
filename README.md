@@ -6,7 +6,7 @@
 ---
 
 ## 🚀 Live Application & Resources
-* **Live Interactive Demo:** [Insert your deployed Streamlit App link here]
+* **Live Interactive Demo:** [https://nimendragiri-lgtm-cynbit-technologies-assessment-app-91puum.streamlit.app/](https://nimendragiri-lgtm-cynbit-technologies-assessment-app-91puum.streamlit.app/)
 * **Primary GitHub Repository:** [nimendragiri-lgtm/Cynbit_technologies_assessment](https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment)
 * **AI Opportunity Report:** `docs/AI_Opportunity_Report.md`
 * **Technical Approach Report:** `docs/Technical_Approach_Report.md`
@@ -81,7 +81,7 @@ When submitting your work in the candidate portal:
 * **Primary Deliverable Link \*:**  
   `https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment`
 * **Additional Link 1:**  
-  `https://<your-app-name>.streamlit.app` *(Streamlit Cloud Live App)*
+  `https://nimendragiri-lgtm-cynbit-technologies-assessment-app-91puum.streamlit.app/` *(Streamlit Cloud Live App)*
 * **Additional Link 2:**  
   `https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment/blob/main/docs/AI_Opportunity_Report.md` *(AI Opportunity Report)*
 * **Additional Link 3:**  

@@ -3,6 +3,8 @@
 **Applicant:** Nimendra Giri  
 **Role:** AI/ML Engineer Intern Assessment  
 **Date:** October 2026  
+**Repository:** [nimendragiri-lgtm/Cynbit_technologies_assessment](https://github.com/nimendragiri-lgtm/Cynbit_technologies_assessment)  
+**Live Prototype:** [Streamlit Application](https://nimendragiri-lgtm-cynbit-technologies-assessment-app-91puum.streamlit.app/)  
 
 ---
 
